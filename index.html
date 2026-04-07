@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Байэль Эркинбеков — Frontend Developer</title>
+<meta name="description" content="Frontend Developer — React, TypeScript, Node.js. Портфолио проектов Байэля Эркинбекова.">
+<meta property="og:title" content="Байэль Эркинбеков — Frontend Developer">
+<meta property="og:description" content="React · TypeScript · Node.js — смотри проекты">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0A0F;
+    --surface: #111118;
+    --surface2: #16161F;
+    --border: rgba(255,255,255,0.07);
+    --accent: #4F7CFF;
+    --accent2: #A78BFA;
+    --text: #E8E8F0;
+    --muted: #6B6B80;
+    --green: #34D399;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* GRID BG */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(79,124,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,124,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* GLOW */
+  .glow {
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-1 { background: rgba(79,124,255,0.12); top: -200px; right: -100px; }
+  .glow-2 { background: rgba(167,139,250,0.08); bottom: -200px; left: -100px; }
+
+  /* LAYOUT */
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,15,0.8);
+    backdrop-filter: blur(12px);
+  }
+  nav .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    padding: 160px 0 100px;
+    text-align: left;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--green);
+    background: rgba(52,211,153,0.08);
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: 100px;
+    padding: 4px 14px;
+    margin-bottom: 32px;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(42px, 7vw, 76px);
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 40px;
+    max-width: 520px;
+    line-height: 1.6;
+    margin-top: 20px;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-primary:hover {
+    background: #6B91FF;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(79,124,255,0.3);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover {
+    border-color: rgba(255,255,255,0.2);
+    color: var(--text);
+  }
+
+  /* STACK PILLS */
+  .stack {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 48px;
+  }
+  .pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 12px;
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    margin: 80px 0 60px;
+  }
+
+  /* SECTION HEADING */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  /* PROJECTS */
+  .projects { padding-bottom: 80px; }
+  .project-grid {
+    display: grid;
+    gap: 16px;
+  }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(79,124,255,0.04) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .project-card:hover {
+    border-color: rgba(79,124,255,0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .project-card:hover::after { opacity: 1; }
+
+  .project-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .project-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .project-link {
+    color: var(--muted);
+    font-size: 18px;
+    transition: color 0.2s;
+    text-decoration: none;
+    padding: 4px;
+  }
+  .project-link:hover { color: var(--accent); }
+
+  .project-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .project-points {
+    list-style: none;
+    margin-bottom: 20px;
+  }
+  .project-points li {
+    font-size: 13px;
+    color: var(--muted);
+    padding: 3px 0 3px 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .project-points li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 11px;
+  }
+
+  .project-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    background: rgba(167,139,250,0.08);
+    border: 1px solid rgba(167,139,250,0.15);
+    border-radius: 4px;
+    padding: 3px 9px;
+  }
+
+  /* SKILLS */
+  .skills-section { padding-bottom: 80px; }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 600px) { .skills-grid { grid-template-columns: 1fr; } }
+  .skill-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .skill-block-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .skill-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .skill-item {
+    font-size: 13px;
+    color: var(--muted);
+    background: var(--surface2);
+    border-radius: 4px;
+    padding: 3px 10px;
+  }
+
+  /* CONTACT */
+  .contact-section { padding-bottom: 100px; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .contact-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: block;
+  }
+  .contact-card:hover {
+    border-color: rgba(79,124,255,0.3);
+    transform: translateY(-1px);
+  }
+  .contact-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .contact-value {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* EXPERIENCE */
+  .exp-section { padding-bottom: 80px; }
+  .exp-item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 24px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .exp-item:last-child { border-bottom: none; }
+  .exp-period {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    padding-top: 2px;
+  }
+  .exp-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .exp-company {
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .exp-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 600px) {
+    .exp-item { grid-template-columns: 1fr; gap: 4px; }
+    .hero { padding: 120px 0 80px; }
+    .nav-links { gap: 16px; }
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    text-align: center;
+  }
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ANIMATIONS */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<nav>
+  <div class="wrap">
+    <a href="#" class="nav-logo">bayel.dev</a>
+    <div class="nav-links">
+      <a href="#projects">Проекты</a>
+      <a href="#skills">Навыки</a>
+      <a href="#experience">Опыт</a>
+      <a href="#contact">Контакты</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-tag">Открыт к предложениям</div>
+    <h1>Байэль<br><em>Эркинбеков</em></h1>
+    <p class="hero-sub">Frontend-разработчик. Строю современные интерфейсы на React и TypeScript — от вёрстки до деплоя.</p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-primary">Связаться →</a>
+      <a href="https://github.com/genssi" target="_blank" class="btn btn-ghost">GitHub</a>
+      <a href="http://www.linkedin.com/in/erkinbekov-bayel-06ba1a28b" target="_blank" class="btn btn-ghost">LinkedIn</a>
+    </div>
+    <div class="stack">
+      <span class="pill">React</span>
+      <span class="pill">TypeScript</span>
+      <span class="pill">JavaScript</span>
+      <span class="pill">Node.js</span>
+      <span class="pill">SCSS</span>
+      <span class="pill">Nginx</span>
+      <span class="pill">Linux</span>
+      <span class="pill">Git</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects" id="projects">
+  <div class="wrap">
+    <div class="section-divider"></div>
+    <div class="section-label">// Проекты</div>
+    <div class="project-grid">
+
+      <div class="project-card fade-in">
+        <div class="project-top">
+          <a href="https://www.mybaskets.online/" target="_blank" class="project-name">MyBaskets.online</a>
+          <a href="https://www.mybaskets.online/" target="_blank" class="project-link">↗</a>
+        </div>
+        <p class="project-desc">Интернет-магазин с корзиной товаров, чекаутом и admin-панелью. Разработан полностью с нуля — от UI до серверной части и деплоя.</p>
+        <ul class="project-points">
+          <li>Full-stack: React + TypeScript на фронте, Node.js на бэке</li>
+          <li>Telegram Bot API для уведомлений о заказах в реальном времени</li>
+          <li>Деплой на VPS: настройка Nginx, HTTPS, CORS, домена</li>
+          <li>Адаптивный UI с Styled Components</li>
+        </ul>
+        <div class="project-tags">
+          <span class="tag">React</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Styled Components</span>
+          <span class="tag">Nginx</span>
+          <span class="tag">Telegram API</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in" style="transition-delay:0.1s">
+        <div class="project-top">
+          <a href="https://github.com/genssi" target="_blank" class="project-name">Другие проекты</a>
+          <a href="https://github.com/genssi" target="_blank" class="project-link">↗</a>
+        </div>
+        <p class="project-desc">Коллекция учебных и пет-проектов на GitHub. Эксперименты с React, TypeScript, CSS-анимациями и API.</p>
+        <ul class="project-points">
+          <li>Работа с публичными REST API</li>
+          <li>Компонентная архитектура React</li>
+          <li>Адаптивная вёрстка и CSS-анимации</li>
+        </ul>
+        <div class="project-tags">
+          <span class="tag">React</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">CSS</span>
+          <span class="tag">REST API</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills-section" id="skills">
+  <div class="wrap">
+    <div class="section-label">// Навыки</div>
+    <div class="skills-grid">
+      <div class="skill-block fade-in">
+        <div class="skill-block-title">Frontend</div>
+        <div class="skill-items">
+          <span class="skill-item">HTML5</span>
+          <span class="skill-item">CSS3 / SCSS</span>
+          <span class="skill-item">JavaScript ES6+</span>
+          <span class="skill-item">TypeScript</span>
+          <span class="skill-item">React</span>
+          <span class="skill-item">React Router</span>
+          <span class="skill-item">Styled Components</span>
+          <span class="skill-item">Bootstrap</span>
+        </div>
+      </div>
+      <div class="skill-block fade-in" style="transition-delay:0.1s">
+        <div class="skill-block-title">Backend & Tools</div>
+        <div class="skill-items">
+          <span class="skill-item">Node.js</span>
+          <span class="skill-item">REST API</span>
+          <span class="skill-item">Telegram Bot API</span>
+          <span class="skill-item">Git / GitHub</span>
+          <span class="skill-item">Vite</span>
+          <span class="skill-item">Figma</span>
+        </div>
+      </div>
+      <div class="skill-block fade-in" style="transition-delay:0.2s">
+        <div class="skill-block-title">DevOps & Systems</div>
+        <div class="skill-items">
+          <span class="skill-item">Linux / Unix</span>
+          <span class="skill-item">Nginx</span>
+          <span class="skill-item">VPS Deploy</span>
+          <span class="skill-item">HTTPS / SSL</span>
+          <span class="skill-item">Python</span>
+          <span class="skill-item">Windows Server</span>
+        </div>
+      </div>
+      <div class="skill-block fade-in" style="transition-delay:0.3s">
+        <div class="skill-block-title">Дополнительно</div>
+        <div class="skill-items">
+          <span class="skill-item">Адаптивная вёрстка</span>
+          <span class="skill-item">SEO-оптимизация</span>
+          <span class="skill-item">Оптимизация производительности</span>
+          <span class="skill-item">CORS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="exp-section" id="experience">
+  <div class="wrap">
+    <div class="section-label">// Опыт работы</div>
+    <div class="exp-item fade-in">
+      <div class="exp-period">2023 – 2024</div>
+      <div>
+        <div class="exp-title">Системный администратор</div>
+        <div class="exp-company">ФККС</div>
+        <div class="exp-desc">Администрирование серверов Linux и Windows Server. Написание скриптов автоматизации на Python. Обслуживание сетевой инфраструктуры.</div>
+      </div>
+    </div>
+    <div class="exp-item fade-in">
+      <div class="exp-period">2020 – 2022</div>
+      <div>
+        <div class="exp-title">Специалист технической поддержки</div>
+        <div class="exp-company">Инфоком</div>
+        <div class="exp-desc">Настройка сетевого и компьютерного оборудования. Поддержка пользователей и устранение неисправностей.</div>
+      </div>
+    </div>
+    <div class="exp-item fade-in">
+      <div class="exp-period">2019 – 2023</div>
+      <div>
+        <div class="exp-title">Бакалавр — Информационные технологии</div>
+        <div class="exp-company">КГТУ — Кыргызский Государственный Технический Университет</div>
+        <div class="exp-desc">Диплом в области информационных технологий. Параллельно — самостоятельное изучение React, TypeScript и разработки.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="wrap">
+    <div class="section-label">// Контакты</div>
+    <div class="contact-grid">
+      <a href="https://t.me/genss_gitignore" target="_blank" class="contact-card">
+        <div class="contact-label">Telegram</div>
+        <div class="contact-value">@genss_gitignore</div>
+      </a>
+      <a href="http://www.linkedin.com/in/erkinbekov-bayel-06ba1a28b" target="_blank" class="contact-card">
+        <div class="contact-label">LinkedIn</div>
+        <div class="contact-value">Bayel Erkinbekov</div>
+      </a>
+      <a href="https://github.com/genssi" target="_blank" class="contact-card">
+        <div class="contact-label">GitHub</div>
+        <div class="contact-value">@genssi</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Байэль Эркинбеков · Frontend Developer · 2025</p>
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
